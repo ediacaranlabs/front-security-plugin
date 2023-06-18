@@ -195,7 +195,7 @@ public class ContextConfigurer {
     	
         securityCollections.put(name, e);
 		
-		logger.trace("added security collection " + name );
+		logger.trace("added security collection name: {}, pattern: {}, methods: {}", name, patterns.toString(), methods == null? "" : methods.toString());
 		
 	}
 
