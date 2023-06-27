@@ -24,12 +24,13 @@ import br.com.uoutec.community.ediacaran.security.AuthorizationManager;
 import br.com.uoutec.community.ediacaran.security.RequiresPermissions;
 import br.com.uoutec.community.ediacaran.security.Subject;
 
-@Singleton
-@Intercepts(isDefault=false)
-@InterceptsStack(name="securityStack", isdefault=true)
+//@Singleton
+//@Intercepts(isDefault=false)
+//@InterceptsStack(name="securityStack", isdefault=true)
+@Deprecated
 public class SecurityInterceptor 
-	extends AbstractInterceptor {
-
+	/*extends AbstractInterceptor*/ {
+/*
 	public static final String ADM_CONTEXT = "${plugins.ediacaran.front.admin_context}";
 	
 	@Inject
@@ -95,5 +96,5 @@ public class SecurityInterceptor
 	public boolean accept(InterceptorHandler handler) {
 		return ((HttpServletRequest)((WebMvcRequest)handler.getRequest()).getServletRequest()).getUserPrincipal() != null;
 	}
-	
+*/	
 }
