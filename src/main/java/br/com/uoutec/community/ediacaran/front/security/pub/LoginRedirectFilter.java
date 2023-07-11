@@ -11,8 +11,13 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class LoginRedirectFilter implements Filter{
 
+	private final Logger logger = LoggerFactory.getLogger(LoginRedirectFilter.class);
+	
 	private String loginPage;
 	
 	private String logoutPage;
@@ -32,9 +37,14 @@ public class LoginRedirectFilter implements Filter{
 		
 		HttpServletRequest httpRequest = (HttpServletRequest)request;
 		
-		String uri  = httpRequest.getRequestURI();
+		String uri = httpRequest.getRequestURI();
+		uri = uri.replace("\\\\+", "/").replaceAll("/+", "/");
 		
-		if(uri.startsWith("/plugins/ediacaran/front-security")) {
+		if(logger.isTraceEnabled()) {
+			logger.trace("check uri: {}", uri);
+		}
+		
+		if(uri.equals(loginPage) || uri.equals(logoutPage)) {
 			chain.doFilter(httpRequest, response);
 			return;
 		}
