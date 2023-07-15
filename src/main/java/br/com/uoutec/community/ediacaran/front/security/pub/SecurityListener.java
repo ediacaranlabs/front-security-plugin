@@ -8,7 +8,8 @@ import br.com.uoutec.community.ediacaran.EdiacaranEventObject;
 import br.com.uoutec.community.ediacaran.plugins.EntityContextPlugin;
 import br.com.uoutec.community.ediacaran.security.SecurityRegistryException;
 
-@Singleton
+//@Singleton
+@Deprecated
 public class SecurityListener implements EdiacaranEventListener{
 
 	@Override

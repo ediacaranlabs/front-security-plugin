@@ -2,7 +2,6 @@ package br.com.uoutec.community.ediacaran.front.security;
 
 import br.com.uoutec.community.ediacaran.AbstractPlugin;
 import br.com.uoutec.community.ediacaran.EdiacaranListenerManager;
-import br.com.uoutec.community.ediacaran.front.security.pub.SecurityListener;
 import br.com.uoutec.community.ediacaran.front.security.pub.WebSecurityManagerPlugin;
 import br.com.uoutec.community.ediacaran.front.security.tomcat.ContextConfigurerListener;
 import br.com.uoutec.community.ediacaran.plugins.EntityContextPlugin;
@@ -34,7 +33,7 @@ public class PluginInstaller extends AbstractPlugin{
 		EdiacaranListenerManager ediacaranListenerManager =
 				EntityContextPlugin.getEntity(EdiacaranListenerManager.class);
 		
-		ediacaranListenerManager.addListener(EntityContextPlugin.getEntity(SecurityListener.class));
+		//ediacaranListenerManager.addListener(EntityContextPlugin.getEntity(SecurityListener.class));
 		ediacaranListenerManager.addListener(EntityContextPlugin.getEntity(ContextConfigurerListener.class));
 		
 	}
@@ -50,7 +49,7 @@ public class PluginInstaller extends AbstractPlugin{
 				EntityContextPlugin.getEntity(EdiacaranListenerManager.class);
 		
 		ediacaranListenerManager.removeListener(EntityContextPlugin.getEntity(ContextConfigurerListener.class));
-		ediacaranListenerManager.removeListener(EntityContextPlugin.getEntity(SecurityListener.class));
+		//ediacaranListenerManager.removeListener(EntityContextPlugin.getEntity(SecurityListener.class));
 	}
 	
 }
