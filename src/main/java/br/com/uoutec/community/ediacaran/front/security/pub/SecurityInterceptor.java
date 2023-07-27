@@ -1,29 +1,5 @@
 package br.com.uoutec.community.ediacaran.front.security.pub;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
-import javax.inject.Inject;
-import javax.inject.Singleton;
-import javax.servlet.http.HttpServletRequest;
-
-import org.brandao.brutos.ResourceAction;
-import org.brandao.brutos.annotation.Intercepts;
-import org.brandao.brutos.annotation.InterceptsStack;
-import org.brandao.brutos.interceptor.AbstractInterceptor;
-import org.brandao.brutos.interceptor.InterceptedException;
-import org.brandao.brutos.interceptor.InterceptorHandler;
-import org.brandao.brutos.interceptor.InterceptorStack;
-import org.brandao.brutos.mapping.Action;
-import org.brandao.brutos.mapping.Controller;
-import org.brandao.brutos.web.WebMvcRequest;
-
-import br.com.uoutec.community.ediacaran.VarParser;
-import br.com.uoutec.community.ediacaran.security.AuthorizationManager;
-import br.com.uoutec.community.ediacaran.security.RequiresPermissions;
-import br.com.uoutec.community.ediacaran.security.Subject;
-
 //@Singleton
 //@Intercepts(isDefault=false)
 //@InterceptsStack(name="securityStack", isdefault=true)
