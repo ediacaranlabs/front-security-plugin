@@ -1,76 +1,48 @@
 package br.com.uoutec.community.ediacaran.front.security.pub;
 
-//@Singleton
-//@Intercepts(isDefault=false)
-//@InterceptsStack(name="securityStack", isdefault=true)
-@Deprecated
+import javax.inject.Singleton;
+
+import org.brandao.brutos.MvcRequest;
+import org.brandao.brutos.annotation.Intercepts;
+import org.brandao.brutos.annotation.InterceptsStack;
+import org.brandao.brutos.interceptor.AbstractInterceptor;
+import org.brandao.brutos.interceptor.InterceptedException;
+import org.brandao.brutos.interceptor.InterceptorHandler;
+import org.brandao.brutos.interceptor.InterceptorStack;
+import org.brandao.brutos.web.HttpStatus;
+import org.brandao.brutos.web.WebStackRequestElement;
+
+import br.com.uoutec.community.ediacaran.plugins.PublicType;
+import br.com.uoutec.community.ediacaran.security.AuthorizationException;
+
+@Singleton
+@Intercepts(isDefault=false)
+@InterceptsStack(name="securityStack", isdefault=true)
 public class SecurityInterceptor 
-	/*extends AbstractInterceptor*/ {
-/*
-	public static final String ADM_CONTEXT = "${plugins.ediacaran.front.admin_context}";
-	
-	@Inject
-	private AuthorizationManager securityManager;
-	
-	@Inject
-	protected VarParser varParser;
-	
+	extends AbstractInterceptor
+	implements PublicType {
+
 	public void intercepted(InterceptorStack stack, InterceptorHandler handler)
 			throws InterceptedException {
+
+		MvcRequest request                         = handler.getRequest();
+		WebStackRequestElement stackRequestElement = (WebStackRequestElement) request.getStackRequestElement();
 		
-		Subject subject = securityManager.getSubject();
-		
-		if(subject == null || !subject.isAuthenticated()) {
-			throw new SecurityException(
-					"resource: " + handler.getRequest().getRequestId());
-		}
-		
-		ResourceAction resourceAction         = handler.getRequest().getResourceAction();
-		Controller controller                 = resourceAction.getController();
-		Action action                         = resourceAction.getMethodForm();
-		
-		String[] requiresPermissions = getPermissions(controller, action);
-		
-		if(subject.isPermittedAll(requiresPermissions)) {
+		try {
 			stack.next(handler);
-		}
-		else {
-			throw new SecurityException(
-				"permissions: " + Arrays.toString(requiresPermissions) + 
-				", resource: " + handler.getRequest().getRequestId());
-		}
-		
-	}
-
-	private String[] getPermissions(Controller controller, Action action) {
-		
-		RequiresPermissions requiresPermissions = null;
-		List<String> permissions = new ArrayList<String>();
-		
-		if(action != null && action.getMethod() != null){
-			requiresPermissions =
-				action.getMethod().getAnnotation(RequiresPermissions.class);
+			Throwable ex = stackRequestElement.getObjectThrow();
 			
-			if(requiresPermissions != null){
-				for(String e: requiresPermissions.value()) {
-					permissions.add(e);
-				}
+			if(ex != null && ex instanceof AuthorizationException) {
+				stackRequestElement.setResponseStatus(HttpStatus.FORBIDDEN);
+				stackRequestElement.setReason("not allowed");
+				stackRequestElement.setView("");
 			}
 		}
+		catch(AuthorizationException ex) {
+			stackRequestElement.setResponseStatus(HttpStatus.FORBIDDEN);
+			stackRequestElement.setReason("not allowed");
+			stackRequestElement.setView("");
+		}
+	}
 
-		requiresPermissions = controller.getClassType().getAnnotation(RequiresPermissions.class);
-		
-		if(requiresPermissions != null){
-			for(String e: requiresPermissions.value()) {
-				permissions.add(e);
-			}
-		}
-		
-		return permissions.toArray(new String[] {});
-	}
-	
-	public boolean accept(InterceptorHandler handler) {
-		return ((HttpServletRequest)((WebMvcRequest)handler.getRequest()).getServletRequest()).getUserPrincipal() != null;
-	}
-*/	
 }
