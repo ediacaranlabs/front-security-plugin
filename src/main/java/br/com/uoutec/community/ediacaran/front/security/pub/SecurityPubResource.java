@@ -22,9 +22,9 @@ import org.brandao.brutos.annotation.web.ResponseErrors;
 import org.brandao.brutos.annotation.web.WebActionStrategyType;
 import org.brandao.brutos.web.WebFlowController;
 
-import br.com.uoutec.community.ediacaran.VarParser;
 import br.com.uoutec.community.ediacaran.system.i18n.PluginLanguageUtils;
-import br.com.uoutec.community.ediacaran.web.EdiacaranWebInvoker;
+import br.com.uoutec.ediacaran.core.VarParser;
+import br.com.uoutec.ediacaran.web.EdiacaranWebInvoker;
 import br.com.uoutec.pub.entity.InvalidRequestException;
 
 @Controller

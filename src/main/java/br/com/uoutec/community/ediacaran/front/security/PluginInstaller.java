@@ -1,11 +1,11 @@
 package br.com.uoutec.community.ediacaran.front.security;
 
-import br.com.uoutec.community.ediacaran.AbstractPlugin;
-import br.com.uoutec.community.ediacaran.EdiacaranListenerManager;
 import br.com.uoutec.community.ediacaran.front.security.pub.WebSecurityManagerPlugin;
 import br.com.uoutec.community.ediacaran.front.security.tomcat.ContextConfigurerListener;
-import br.com.uoutec.community.ediacaran.plugins.EntityContextPlugin;
 import br.com.uoutec.community.ediacaran.security.SecurityRegistryException;
+import br.com.uoutec.ediacaran.core.AbstractPlugin;
+import br.com.uoutec.ediacaran.core.EdiacaranListenerManager;
+import br.com.uoutec.ediacaran.core.plugins.EntityContextPlugin;
 
 public class PluginInstaller extends AbstractPlugin{
 	

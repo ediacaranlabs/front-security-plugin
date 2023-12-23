@@ -12,8 +12,8 @@ import org.brandao.brutos.interceptor.InterceptorStack;
 import org.brandao.brutos.web.HttpStatus;
 import org.brandao.brutos.web.WebStackRequestElement;
 
-import br.com.uoutec.community.ediacaran.plugins.PublicType;
 import br.com.uoutec.community.ediacaran.security.AuthorizationException;
+import br.com.uoutec.ediacaran.core.plugins.PublicType;
 
 @Singleton
 @Intercepts(isDefault=false)

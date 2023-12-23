@@ -14,17 +14,17 @@ import javax.inject.Singleton;
 import org.apache.catalina.Context;
 import org.apache.catalina.realm.JAASRealm;
 
-import br.com.uoutec.community.ediacaran.ContextManager;
-import br.com.uoutec.community.ediacaran.EdiacaranEventListener;
-import br.com.uoutec.community.ediacaran.EdiacaranEventObject;
 import br.com.uoutec.community.ediacaran.front.security.pub.LoginRedirectFilter;
 import br.com.uoutec.community.ediacaran.front.security.pub.SecurityConfig;
 import br.com.uoutec.community.ediacaran.front.security.pub.WebSecurityManagerPlugin;
-import br.com.uoutec.community.ediacaran.plugins.EntityContextPlugin;
 import br.com.uoutec.community.ediacaran.security.AbstractSecurityCallback;
 import br.com.uoutec.community.ediacaran.security.SecurityConstraint;
 import br.com.uoutec.community.ediacaran.security.jaas.RolePrincipal;
 import br.com.uoutec.community.ediacaran.security.jaas.UserPrincipal;
+import br.com.uoutec.ediacaran.core.ContextManager;
+import br.com.uoutec.ediacaran.core.EdiacaranEventListener;
+import br.com.uoutec.ediacaran.core.EdiacaranEventObject;
+import br.com.uoutec.ediacaran.core.plugins.EntityContextPlugin;
 
 @Singleton
 public class ContextConfigurerListener implements EdiacaranEventListener{

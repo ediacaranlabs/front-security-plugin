@@ -2,11 +2,11 @@ package br.com.uoutec.community.ediacaran.front.security.pub;
 
 import javax.inject.Singleton;
 
-import br.com.uoutec.community.ediacaran.ContextManager;
-import br.com.uoutec.community.ediacaran.EdiacaranEventListener;
-import br.com.uoutec.community.ediacaran.EdiacaranEventObject;
-import br.com.uoutec.community.ediacaran.plugins.EntityContextPlugin;
 import br.com.uoutec.community.ediacaran.security.SecurityRegistryException;
+import br.com.uoutec.ediacaran.core.ContextManager;
+import br.com.uoutec.ediacaran.core.EdiacaranEventListener;
+import br.com.uoutec.ediacaran.core.EdiacaranEventObject;
+import br.com.uoutec.ediacaran.core.plugins.EntityContextPlugin;
 
 //@Singleton
 @Deprecated
