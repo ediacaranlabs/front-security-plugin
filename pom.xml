@@ -8,6 +8,7 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<weld.version>3.1.9.Final</weld.version>
 	</properties>
 
 	<build>
@@ -34,8 +35,31 @@
 							<goal>copy-dependencies</goal>
 						</goals>
 						<configuration>
-							<excludeScope>provided</excludeScope>
 							<outputDirectory>${project.build.directory}/lib/</outputDirectory>
+							<excludeArtifactIds>
+								ediacaran-junit-mock,
+								application-se,
+								objenesis,
+								ediacaran-junit,
+								mockito-core,
+								opentest4j,
+								junit-jupiter-engine,
+								byte-buddy,
+								ediacaran-weld,
+							</excludeArtifactIds>
+							<excludeGroupIds>
+								org.jboss.weld.se,
+								org.jboss,
+								org.jboss.weld.servlet,
+								org.mockito,
+								org.junit.jupiter,
+								org.junit.platform,
+								org.apiguardian,
+								net.bytebuddy,
+								org.slf4j,
+								log4j
+							</excludeGroupIds>
+							<excludeScope>provided</excludeScope>
 						</configuration>
 					</execution>
 				</executions>
@@ -79,5 +103,42 @@
 			<scope>provided</scope>
 		</dependency>
 		<!-- dependencies -->
+		<dependency>
+			<groupId>br.com.uoutec</groupId>
+			<artifactId>ediacaran-weld</artifactId>
+			<version>1.0.0</version>
+			<scope>provided</scope>
+		</dependency>
+		<!--  Test -->
+        <dependency>
+			<groupId>br.com.uoutec</groupId>
+			<artifactId>ediacaran-junit</artifactId>
+			<version>1.0.0</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>br.com.uoutec</groupId>
+			<artifactId>ediacaran-junit-mock</artifactId>
+			<version>1.0.0</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+		    <groupId>org.mockito</groupId>
+		    <artifactId>mockito-core</artifactId>
+		    <version>5.4.0</version>
+		    <scope>test</scope>
+		</dependency>
+		<dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
+		    <version>5.8.2</version>
+            <scope>test</scope>
+        </dependency>		
+		<dependency>
+		    <groupId>org.junit.jupiter</groupId>
+		    <artifactId>junit-jupiter-engine</artifactId>
+		    <version>5.8.2</version>
+		    <scope>test</scope>
+		</dependency>
 	</dependencies>
 </project>
