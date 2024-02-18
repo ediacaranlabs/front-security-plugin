@@ -111,7 +111,17 @@ public class ContextConfigurerListener implements EdiacaranEventListener{
 	}
 	
 	private void registerRealm(Context context) {
-        JAASRealm realm = new JAASRealm();
+		
+        JAASRealm realm = new JAASRealm() {
+        	/*
+            protected Configuration getConfig() {
+            	return ContextSystemSecurityCheck.doPrivileged(()->{
+            		return Configuration.getConfiguration();            		
+            	});
+            }
+        	*/
+        };
+        
         realm.setAppName("default");
         realm.setUserClassNames(UserPrincipal.class.getName());
         realm.setRoleClassNames(RolePrincipal.class.getName());
