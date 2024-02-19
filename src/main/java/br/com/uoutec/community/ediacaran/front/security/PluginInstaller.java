@@ -1,8 +1,11 @@
 package br.com.uoutec.community.ediacaran.front.security;
 
+import java.io.IOException;
+
 import br.com.uoutec.community.ediacaran.front.security.pub.WebSecurityManagerPlugin;
 import br.com.uoutec.community.ediacaran.front.security.tomcat.ContextConfigurerListener;
 import br.com.uoutec.community.ediacaran.security.SecurityRegistryException;
+import br.com.uoutec.community.ediacaran.system.i18n.Plugini18nManager;
 import br.com.uoutec.ediacaran.core.AbstractPlugin;
 import br.com.uoutec.ediacaran.core.EdiacaranListenerManager;
 import br.com.uoutec.ediacaran.core.plugins.EntityContextPlugin;
@@ -12,8 +15,14 @@ public class PluginInstaller extends AbstractPlugin{
 	public void install() throws Throwable{
 		applySecurityConfiguration();
 		registerListeners();
+		registeri18n();
 	}
 
+	private void registeri18n() throws IOException {
+		Plugini18nManager pi18n = EntityContextPlugin.getEntity(Plugini18nManager.class);
+		pi18n.registerLanguages();
+	}
+	
 	private void applySecurityConfiguration() throws SecurityRegistryException {
 		WebSecurityManagerPlugin webSecurityManagerPlugin = 
 				EntityContextPlugin.getEntity(WebSecurityManagerPlugin.class);
@@ -41,6 +50,12 @@ public class PluginInstaller extends AbstractPlugin{
 	@Override
 	public void uninstall() throws Throwable {
 		removeListeners();
+		unregisteri18n();
+	}
+
+	private void unregisteri18n() throws IOException {
+		Plugini18nManager pi18n = EntityContextPlugin.getEntity(Plugini18nManager.class);
+		pi18n.unregisterLanguages();
 	}
 	
 	private void removeListeners() {
