@@ -2,7 +2,6 @@ package br.com.uoutec.community.ediacaran.front.security;
 
 import java.io.IOException;
 
-import br.com.uoutec.application.security.ContextSystemSecurityCheck;
 import br.com.uoutec.community.ediacaran.front.security.pub.WebSecurityManagerPlugin;
 import br.com.uoutec.community.ediacaran.front.security.tomcat.ContextConfigurerListener;
 import br.com.uoutec.community.ediacaran.security.SecurityRegistryException;
@@ -14,12 +13,9 @@ import br.com.uoutec.ediacaran.core.plugins.EntityContextPlugin;
 public class PluginInstaller extends AbstractPlugin{
 	
 	public void install() throws Throwable{
-		ContextSystemSecurityCheck.doPrivileged(()->{
-			applySecurityConfiguration();
-			registerListeners();
-			registeri18n();
-			return null;
-		});
+		applySecurityConfiguration();
+		registerListeners();
+		registeri18n();
 	}
 
 	private void registeri18n() throws IOException {
@@ -53,11 +49,8 @@ public class PluginInstaller extends AbstractPlugin{
 	
 	@Override
 	public void uninstall() throws Throwable {
-		ContextSystemSecurityCheck.doPrivileged(()->{
-			removeListeners();
-			unregisteri18n();
-			return null;
-		});
+		removeListeners();
+		unregisteri18n();
 	}
 
 	private void unregisteri18n() throws IOException {
