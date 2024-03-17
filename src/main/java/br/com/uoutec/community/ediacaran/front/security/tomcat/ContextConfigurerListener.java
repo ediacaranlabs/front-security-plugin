@@ -122,7 +122,7 @@ public class ContextConfigurerListener implements EdiacaranEventListener{
         	*/
         };
         
-        realm.setUseContextClassLoader(false);
+        realm.setUseContextClassLoader(true);
         realm.setAppName("default");
         realm.setUserClassNames(UserPrincipal.class.getName());
         realm.setRoleClassNames(RolePrincipal.class.getName());
