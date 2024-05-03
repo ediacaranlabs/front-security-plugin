@@ -47,10 +47,6 @@ public class SecurityPubResource {
 			String username,
 			@Basic(bean="password")
 			String password,
-			@Basic(bean="redirectTo")
-			String redirectTo,
-			@Basic(bean="referer", scope=ScopeType.HEADER)
-			String referer,
 			@Basic(mappingType=MappingTypes.VALUE)
 			HttpServletRequest request,			
 			@Basic(bean=EdiacaranWebInvoker.LOCALE_VAR, scope=ScopeType.REQUEST, mappingType=MappingTypes.VALUE)
@@ -79,11 +75,10 @@ public class SecurityPubResource {
 		}
 		
 
-		return redirectTo == null? referer : redirectTo;
+		return varParser.getValue("${plugins.ediacaran.front.landing_page}");
 	}
 	
 	@Action("/logout")
-	//@View("/${plugins.ediacaran.front-security.template}/admin/logout")
 	public void logout(
 			@Basic(mappingType=MappingTypes.VALUE)
 			HttpServletRequest request) throws ServletException {
