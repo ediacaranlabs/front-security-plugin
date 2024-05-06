@@ -15,7 +15,7 @@ import br.com.uoutec.ediacaran.junit.junit5.EdiacaranExt;
 import br.com.uoutec.ediacaran.weld.tomcat.TomcatServerBootstrapBuilder;
 
 @ExtendWith(EdiacaranExt.class)
-@PluginContext("front-security")
+@PluginContext("front_security")
 public class PluginInstallerTest {
 
 	public EdiacaranBootstrap getEdiacaranBootstrap() {
@@ -27,7 +27,7 @@ public class PluginInstallerTest {
 	@ActiveRequestContext
 	public void installTest() throws ThreadGroupManagerException, ClassNotFoundException{
 		PluginType pluginType = EntityContextPlugin.getEntity(PluginType.class);
-		assertEquals("front-security", pluginType.getConfiguration().getMetadata().getCode());
+		assertEquals("front_security", pluginType.getConfiguration().getMetadata().getCode());
 	}
 	
 }

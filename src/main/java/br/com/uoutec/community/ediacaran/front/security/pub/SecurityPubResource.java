@@ -29,7 +29,7 @@ import br.com.uoutec.pub.entity.InvalidRequestException;
 
 @Controller
 @ActionStrategy(WebActionStrategyType.DETACHED)
-@Action(value="/login", view=@View("${plugins.ediacaran.front-security.template}/admin/login/login"))
+@Action(value="/login", view=@View("${plugins.ediacaran.front_security.template}/admin/login/login"))
 @ResponseError(rendered=false)
 public class SecurityPubResource {
 
@@ -39,7 +39,7 @@ public class SecurityPubResource {
 	
 	@Action("/login")
 	@RequestMethod(RequestMethodTypes.POST)
-	@View("${plugins.ediacaran.front-security.template}/admin/login/login_result")
+	@View("${plugins.ediacaran.front_security.template}/admin/login/login_result")
 	@ResponseErrors(rendered=false, name="exception")
 	@Result("refererResource")
 	public String login(

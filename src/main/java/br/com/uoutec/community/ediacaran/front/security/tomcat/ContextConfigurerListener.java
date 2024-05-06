@@ -29,9 +29,9 @@ import br.com.uoutec.ediacaran.core.plugins.EntityContextPlugin;
 @Singleton
 public class ContextConfigurerListener implements EdiacaranEventListener{
 
-	public static final String LOGIN_PAGE = "/plugins/ediacaran/front-security/login";
+	public static final String LOGIN_PAGE = "/plugins/ediacaran/front_security/login";
 	
-	public static final String LOGOUT_PAGE = "/plugins/ediacaran/front-security/logout";
+	public static final String LOGOUT_PAGE = "/plugins/ediacaran/front_security/logout";
 	
 	public ContextConfigurerListener() {
 	}
