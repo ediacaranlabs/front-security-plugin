@@ -4,7 +4,7 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import br.com.uoutec.community.ediacaran.security.AbstractAuthorizationManagerPlugin;
-import br.com.uoutec.community.ediacaran.security.SecurityRegistry;
+import br.com.uoutec.community.ediacaran.security.AuthorizationManager;
 
 @Singleton
 public class WebSecurityManagerPlugin 
@@ -16,9 +16,9 @@ public class WebSecurityManagerPlugin
 	private SecurityBuilder builder;
 
 	@Inject
-	public WebSecurityManagerPlugin(SecurityRegistry securityRegistry){
+	public WebSecurityManagerPlugin(AuthorizationManager authorizationManager){
 		this.securityConfig = new SecurityConfig();
-		this.builder = new SecurityBuilderImp(securityConfig, securityRegistry);
+		this.builder = new SecurityBuilderImp(securityConfig, authorizationManager);
 	}
 	
 	@Override

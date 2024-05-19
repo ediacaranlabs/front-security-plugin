@@ -1,23 +1,23 @@
 package br.com.uoutec.community.ediacaran.front.security.pub;
 
+import br.com.uoutec.community.ediacaran.security.AuthorizationManager;
 import br.com.uoutec.community.ediacaran.security.SecurityConstraint;
-import br.com.uoutec.community.ediacaran.security.SecurityRegistry;
 
 public class SecurityBuilderImp 
 	implements SecurityBuilder{
 
-	private SecurityRegistry securityRegistry;
+	private AuthorizationManager authorizationManager;
 	
 	private SecurityConfig securityConfig;
 	
 	public SecurityBuilderImp(SecurityBuilderImp builder) {
 		this.securityConfig = builder.securityConfig;
-		this.securityRegistry = builder.securityRegistry;
+		this.authorizationManager = builder.authorizationManager;
 	}
 	
-	public SecurityBuilderImp(SecurityConfig value, SecurityRegistry securityRegistry) {
+	public SecurityBuilderImp(SecurityConfig value, AuthorizationManager authorizationManager) {
 		this.securityConfig = value;
-		this.securityRegistry = securityRegistry;
+		this.authorizationManager = authorizationManager;
 	}
 	
 	protected SecurityConfig getSecurityConfig() {
@@ -27,7 +27,7 @@ public class SecurityBuilderImp
 	public SecurityConstraintBuilder addConstraint(String value) {
 		SecurityConstraint sc = new SecurityConstraint(value);
 		securityConfig.getConstraints().add(sc);
-		return new SecurityConstraintBuilderImp(sc, securityRegistry, this);
+		return new SecurityConstraintBuilderImp(sc, authorizationManager, this);
 	}
 	
 	public SecurityBuilder setRealmName(String value) {

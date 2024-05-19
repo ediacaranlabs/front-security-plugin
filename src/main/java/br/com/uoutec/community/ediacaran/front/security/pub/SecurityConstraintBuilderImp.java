@@ -1,7 +1,7 @@
 package br.com.uoutec.community.ediacaran.front.security.pub;
 
+import br.com.uoutec.community.ediacaran.security.AuthorizationManager;
 import br.com.uoutec.community.ediacaran.security.SecurityConstraint;
-import br.com.uoutec.community.ediacaran.security.SecurityRegistry;
 import br.com.uoutec.community.ediacaran.security.SecurityRegistryException;
 
 public class SecurityConstraintBuilderImp 
@@ -26,18 +26,19 @@ public class SecurityConstraintBuilderImp
 	
 	public static final String PATCH = "PATCH";
 
-	private SecurityRegistry securityRegistry;
+	private AuthorizationManager authorizationManager;
 	
 	private SecurityConstraint securityConstraint;
 	
-	public SecurityConstraintBuilderImp(SecurityConstraint sc, SecurityRegistry securityRegistry, SecurityBuilderImp parent) {
+	public SecurityConstraintBuilderImp(SecurityConstraint sc, 
+			AuthorizationManager authorizationManager, SecurityBuilderImp parent) {
 		super(parent);
 		this.securityConstraint = sc;
-		this.securityRegistry = securityRegistry;
+		this.authorizationManager = authorizationManager;
 	}
 	
 	public SecurityConstraintBuilderImp addRole(String value) throws SecurityRegistryException {
-		if(securityRegistry.getRole(value) == null) {
+		if(authorizationManager.getRole(value) == null) {
 			throw new SecurityRegistryException("role not found: " + value);
 		}
 		
