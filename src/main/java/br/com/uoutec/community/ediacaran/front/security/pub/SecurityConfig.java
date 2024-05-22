@@ -1,5 +1,6 @@
 package br.com.uoutec.community.ediacaran.front.security.pub;
 
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -18,6 +19,7 @@ public class SecurityConfig {
 	
 	public SecurityConfig() {
 		this.constraints = new HashSet<SecurityConstraint>();
+		this.options = new HashMap<>();
 	}
 	
 	public Set<SecurityConstraint> getConstraints() {

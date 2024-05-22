@@ -19,12 +19,8 @@ public class WebSecurityManagerPlugin
 		this.builder = new SecurityBuilderImp(securityConfig);
 	}
 	
-	public synchronized void setSecurityConfig(SecurityConfig securityConfig) {
-		if(this.securityConfig != null) {
-			throw new SecurityException();
-		}
-		
-		this.securityConfig = securityConfig;
+	public SecurityConfig build() {
+		return securityConfig;
 	}
 	
 	@Override

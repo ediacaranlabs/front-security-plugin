@@ -25,18 +25,14 @@ import br.com.uoutec.ediacaran.core.ContextManager;
 import br.com.uoutec.ediacaran.core.EdiacaranEventListener;
 import br.com.uoutec.ediacaran.core.EdiacaranEventObject;
 import br.com.uoutec.ediacaran.core.plugins.EntityContextPlugin;
-import br.com.uoutec.ediacaran.core.plugins.PluginInitializer;
-import br.com.uoutec.ediacaran.core.plugins.PluginNode;
 import br.com.uoutec.ediacaran.web.tomcat.ContextEvent;
 
 @Singleton
-public class ContextConfigurerListener implements EdiacaranEventListener{
+public class ContextConfigurerListener implements EdiacaranEventListener {
 
 	public static final String LOGIN_PAGE = "/plugins/ediacaran/front_security/login";
 	
 	public static final String LOGOUT_PAGE = "/plugins/ediacaran/front_security/logout";
-	
-	private static final String SECURITY_CONFIG = "security_config";
 	
 	public ContextConfigurerListener() {
 	}
@@ -44,16 +40,6 @@ public class ContextConfigurerListener implements EdiacaranEventListener{
 	@Override
 	public void onEvent(EdiacaranEventObject event) {
 
-		if(event.getSource() instanceof PluginInitializer && event.getData() instanceof PluginNode) {
-			if("installing".equals(event.getType())) {
-				applySecurityConfig((PluginInitializer)event.getSource(), (PluginNode)event.getData());
-			}
-			else
-			if("uninstalled".equals(event.getType())) {
-				destroySecurityConfig((PluginInitializer)event.getSource(), (PluginNode)event.getData());
-			}
-		}
-		else
 		if(event.getSource() instanceof ContextManager && event.getData() instanceof ContextEvent) {
 			if("initializing".equals(event.getType())) {
 				applySecurityConfig((ContextEvent)event.getData());
@@ -64,30 +50,15 @@ public class ContextConfigurerListener implements EdiacaranEventListener{
 			}
 		}
 	}
-
-	public void applySecurityConfig(PluginInitializer installer, PluginNode pluginNode) {
-		
-		final WebSecurityManagerPlugin smp = 
-				EntityContextPlugin.getEntity(WebSecurityManagerPlugin.class);
-		
-		if(smp == null) {
-			return;
-		}
-		
-		SecurityConfig securityConfig = new SecurityConfig();
-		pluginNode.setVar(SECURITY_CONFIG, securityConfig);
-		
-		smp.setSecurityConfig(securityConfig);
-		
-	}
-	
-	public void destroySecurityConfig(PluginInitializer installer, PluginNode pluginNode) {
-	}
 	
 	public void applySecurityConfig(ContextEvent ctx) {
 		
 		Context context = ctx.getContext();
-		SecurityConfig value = ctx.getNode().getVar(SECURITY_CONFIG, SecurityConfig.class);
+		
+		final WebSecurityManagerPlugin smp = 
+				EntityContextPlugin.getEntity(WebSecurityManagerPlugin.class);
+		
+		SecurityConfig value = smp.build();
 		
 		if(value.getMethod() == null) {
 			return;
