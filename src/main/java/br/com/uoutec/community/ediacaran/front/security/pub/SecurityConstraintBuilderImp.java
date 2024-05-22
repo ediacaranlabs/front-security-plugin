@@ -1,6 +1,5 @@
 package br.com.uoutec.community.ediacaran.front.security.pub;
 
-import br.com.uoutec.community.ediacaran.security.AuthorizationManager;
 import br.com.uoutec.community.ediacaran.security.SecurityConstraint;
 import br.com.uoutec.community.ediacaran.security.SecurityRegistryException;
 
@@ -26,72 +25,64 @@ public class SecurityConstraintBuilderImp
 	
 	public static final String PATCH = "PATCH";
 
-	private AuthorizationManager authorizationManager;
-	
 	private SecurityConstraint securityConstraint;
 	
-	public SecurityConstraintBuilderImp(SecurityConstraint sc, 
-			AuthorizationManager authorizationManager, SecurityBuilderImp parent) {
+	public SecurityConstraintBuilderImp(SecurityConstraint sc, SecurityBuilderImp parent) {
 		super(parent);
 		this.securityConstraint = sc;
-		this.authorizationManager = authorizationManager;
 	}
 	
-	public SecurityConstraintBuilderImp addRole(String value) throws SecurityRegistryException {
-		if(authorizationManager.getRole(value) == null) {
-			throw new SecurityRegistryException("role not found: " + value);
-		}
-		
+	public SecurityConstraintBuilder addRole(String value) throws SecurityRegistryException {
 		securityConstraint.getRoles().add(value);
 		return this;
 	}
 	
-	public SecurityConstraintBuilderImp get() {
+	public SecurityConstraintBuilder get() {
 		securityConstraint.getMethods().add(GET);
 		return this;
 	}
 	
-	public SecurityConstraintBuilderImp head() {
+	public SecurityConstraintBuilder head() {
 		securityConstraint.getMethods().add(HEAD);
 		return this;
 	}
 
-	public SecurityConstraintBuilderImp post() {
+	public SecurityConstraintBuilder post() {
 		securityConstraint.getMethods().add(POST);
 		return this;
 	}
 	
-	public SecurityConstraintBuilderImp put() {
+	public SecurityConstraintBuilder put() {
 		securityConstraint.getMethods().add(PUT);
 		return this;
 	}
 	
-	public SecurityConstraintBuilderImp delete() {
+	public SecurityConstraintBuilder delete() {
 		securityConstraint.getMethods().add(DELETE);
 		return this;
 	}
 	
-	public SecurityConstraintBuilderImp options() {
+	public SecurityConstraintBuilder options() {
 		securityConstraint.getMethods().add(OPTIONS);
 		return this;
 	}
 	
-	public SecurityConstraintBuilderImp trace() {
+	public SecurityConstraintBuilder trace() {
 		securityConstraint.getMethods().add(TRACE);
 		return this;
 	}
 	
-	public SecurityConstraintBuilderImp patch() {
+	public SecurityConstraintBuilder patch() {
 		securityConstraint.getMethods().add(PATCH);
 		return this;
 	}
 
-	public SecurityConstraintBuilderImp connect() {
+	public SecurityConstraintBuilder connect() {
 		securityConstraint.getMethods().add(CONNECT);
 		return this;
 	}
 	
-	public SecurityConstraintBuilderImp method(String value) {
+	public SecurityConstraintBuilder method(String value) {
 		securityConstraint.getMethods().add(value.toUpperCase());
 		return this;
 	}

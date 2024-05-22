@@ -1,6 +1,7 @@
 package br.com.uoutec.community.ediacaran.front.security.pub;
 
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 import br.com.uoutec.community.ediacaran.security.SecurityConstraint;
@@ -13,9 +14,7 @@ public class SecurityConfig {
 	
 	private String realmName;
 
-	private String loginPage;
-	
-	private String errorPage;
+	private Map<String, Object> options;
 	
 	public SecurityConfig() {
 		this.constraints = new HashSet<SecurityConstraint>();
@@ -45,20 +44,12 @@ public class SecurityConfig {
 		this.realmName = realmName;
 	}
 
-	public String getLoginPage() {
-		return loginPage;
+	public void setOption(String key, Object value) {
+		options.put(key, value);
 	}
-
-	public void setLoginPage(String loginPage) {
-		this.loginPage = loginPage;
-	}
-
-	public String getErrorPage() {
-		return errorPage;
-	}
-
-	public void setErrorPage(String errorPage) {
-		this.errorPage = errorPage;
+	
+	public Object getOption(String key) {
+		return options.get(key);
 	}
 
 }

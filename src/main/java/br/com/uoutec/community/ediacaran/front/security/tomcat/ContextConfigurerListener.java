@@ -14,10 +14,10 @@ import javax.inject.Singleton;
 import org.apache.catalina.Context;
 import org.apache.catalina.realm.JAASRealm;
 
+import br.com.uoutec.community.ediacaran.front.security.pub.AuthenticationMethodBuilder;
 import br.com.uoutec.community.ediacaran.front.security.pub.LoginRedirectFilter;
 import br.com.uoutec.community.ediacaran.front.security.pub.SecurityConfig;
 import br.com.uoutec.community.ediacaran.front.security.pub.WebSecurityManagerPlugin;
-import br.com.uoutec.community.ediacaran.security.AbstractSecurityCallback;
 import br.com.uoutec.community.ediacaran.security.SecurityConstraint;
 import br.com.uoutec.community.ediacaran.security.jaas.RolePrincipal;
 import br.com.uoutec.community.ediacaran.security.jaas.UserPrincipal;
@@ -25,6 +25,9 @@ import br.com.uoutec.ediacaran.core.ContextManager;
 import br.com.uoutec.ediacaran.core.EdiacaranEventListener;
 import br.com.uoutec.ediacaran.core.EdiacaranEventObject;
 import br.com.uoutec.ediacaran.core.plugins.EntityContextPlugin;
+import br.com.uoutec.ediacaran.core.plugins.PluginInitializer;
+import br.com.uoutec.ediacaran.core.plugins.PluginNode;
+import br.com.uoutec.ediacaran.web.tomcat.ContextEvent;
 
 @Singleton
 public class ContextConfigurerListener implements EdiacaranEventListener{
@@ -33,50 +36,58 @@ public class ContextConfigurerListener implements EdiacaranEventListener{
 	
 	public static final String LOGOUT_PAGE = "/plugins/ediacaran/front_security/logout";
 	
+	private static final String SECURITY_CONFIG = "security_config";
+	
 	public ContextConfigurerListener() {
 	}
 
 	@Override
 	public void onEvent(EdiacaranEventObject event) {
-		
-		if(event.getSource() instanceof ContextManager && event.getData() instanceof Context) {
-			
-			final Context ctx = (Context)event.getData();
-			final WebSecurityManagerPlugin smp = EntityContextPlugin.getEntity(WebSecurityManagerPlugin.class);
-			
-			if(smp == null) {
-				return;
+
+		if(event.getSource() instanceof PluginInitializer && event.getData() instanceof PluginNode) {
+			if("installing".equals(event.getType())) {
+				applySecurityConfig((PluginInitializer)event.getSource(), (PluginNode)event.getData());
 			}
-			
+			else
+			if("uninstalled".equals(event.getType())) {
+				destroySecurityConfig((PluginInitializer)event.getSource(), (PluginNode)event.getData());
+			}
+		}
+		else
+		if(event.getSource() instanceof ContextManager && event.getData() instanceof ContextEvent) {
 			if("initializing".equals(event.getType())) {
-				
-				smp.applySecurityConfig(new AbstractSecurityCallback() {
-					
-					@Override
-					public void applySecurityConfig(Object value) {
-						ContextConfigurerListener.this.applySecurityConfig((SecurityConfig)value, ctx);
-					}
-					
-				});
-				
+				applySecurityConfig((ContextEvent)event.getData());
 			}
 			else
 			if("destroying".equals(event.getType())) {
-
-				smp.applySecurityConfig(new AbstractSecurityCallback() {
-					
-					@Override
-					public void destroySecurityConfig(Object value) {
-						ContextConfigurerListener.this.destroySecurityConfig((SecurityConfig)value, ctx);
-					}
-					
-				});
-				
+				destroySecurityConfig((ContextEvent)event.getData());
 			}
 		}
 	}
+
+	public void applySecurityConfig(PluginInitializer installer, PluginNode pluginNode) {
+		
+		final WebSecurityManagerPlugin smp = 
+				EntityContextPlugin.getEntity(WebSecurityManagerPlugin.class);
+		
+		if(smp == null) {
+			return;
+		}
+		
+		SecurityConfig securityConfig = new SecurityConfig();
+		pluginNode.setVar(SECURITY_CONFIG, securityConfig);
+		
+		smp.setSecurityConfig(securityConfig);
+		
+	}
 	
-	public void applySecurityConfig(SecurityConfig value, Context context) {
+	public void destroySecurityConfig(PluginInitializer installer, PluginNode pluginNode) {
+	}
+	
+	public void applySecurityConfig(ContextEvent ctx) {
+		
+		Context context = ctx.getContext();
+		SecurityConfig value = ctx.getNode().getVar(SECURITY_CONFIG, SecurityConfig.class);
 		
 		if(value.getMethod() == null) {
 			return;
@@ -88,7 +99,7 @@ public class ContextConfigurerListener implements EdiacaranEventListener{
 		
 		addRoles(value, contextConfigurer);
 		
-		if(value.getLoginPage() != null) {
+		if(value.getOption(AuthenticationMethodBuilder.LOGIN_PAGE) != null) {
 			contextConfigurer.setLoginConfig(value.getMethod(), value.getRealmName() == null? "ediacaranRealm" : value.getRealmName(), "/login", "/login?error");
 			
 			contextConfigurer.addFilter(
@@ -106,21 +117,13 @@ public class ContextConfigurerListener implements EdiacaranEventListener{
 		registerRealm(context);
 	}
 
-	public void destroySecurityConfig(SecurityConfig value, Context context) {
+	public void destroySecurityConfig(ContextEvent ctx) {
 		
 	}
 	
 	private void registerRealm(Context context) {
 		
-        JAASRealm realm = new JAASRealm() {
-        	/*
-            protected Configuration getConfig() {
-            	return ContextSystemSecurityCheck.doPrivileged(()->{
-            		return Configuration.getConfiguration();            		
-            	});
-            }
-        	*/
-        };
+        JAASRealm realm = new JAASRealm();
         
         realm.setUseContextClassLoader(true);
         realm.setAppName("default");

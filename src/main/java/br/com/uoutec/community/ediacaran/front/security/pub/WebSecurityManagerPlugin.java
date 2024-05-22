@@ -3,13 +3,11 @@ package br.com.uoutec.community.ediacaran.front.security.pub;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-import br.com.uoutec.community.ediacaran.security.AbstractAuthorizationManagerPlugin;
 import br.com.uoutec.community.ediacaran.security.AuthorizationManager;
 
 @Singleton
 public class WebSecurityManagerPlugin 
-	extends AbstractAuthorizationManagerPlugin
-	implements SecurityBuilder{
+	implements SecurityBuilder {
 
 	private SecurityConfig securityConfig;
 
@@ -18,14 +16,17 @@ public class WebSecurityManagerPlugin
 	@Inject
 	public WebSecurityManagerPlugin(AuthorizationManager authorizationManager){
 		this.securityConfig = new SecurityConfig();
-		this.builder = new SecurityBuilderImp(securityConfig, authorizationManager);
+		this.builder = new SecurityBuilderImp(securityConfig);
 	}
 	
-	@Override
-	protected Object getSecurityConfig() {
-		return securityConfig;
+	public synchronized void setSecurityConfig(SecurityConfig securityConfig) {
+		if(this.securityConfig != null) {
+			throw new SecurityException();
+		}
+		
+		this.securityConfig = securityConfig;
 	}
-
+	
 	@Override
 	public SecurityConstraintBuilder addConstraint(String value) {
 		return builder.addConstraint(value);
@@ -46,14 +47,13 @@ public class WebSecurityManagerPlugin
 		builder.cert();
 	}
 
-	@Override
-	public void form(String loginPage) {
-		builder.form(loginPage);
+	public AuthenticationMethodBuilder form() {
+		return builder.form();
 	}
 
 	@Override
-	public void form(String loginPage, String errorPage) {
-		builder.form(loginPage, errorPage);
+	public AuthenticationMethodBuilder authenticationMethod(String value) {
+		return builder.authenticationMethod(value);
 	}
 	
 }

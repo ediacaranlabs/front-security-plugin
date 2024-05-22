@@ -12,14 +12,14 @@ public interface SecurityBuilder {
 	
 	SecurityConstraintBuilder addConstraint(String value);
 	
+	AuthenticationMethodBuilder authenticationMethod(String value);
+	
 	void basic();
 	
 	void digest();
 	
 	void cert();
 	
-	void form(String loginPage);
-	
-	void form(String loginPage, String errorPage);
+	AuthenticationMethodBuilder form();
 	
 }

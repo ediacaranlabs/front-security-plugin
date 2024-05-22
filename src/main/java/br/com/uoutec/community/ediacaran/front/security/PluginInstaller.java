@@ -2,6 +2,7 @@ package br.com.uoutec.community.ediacaran.front.security;
 
 import java.io.IOException;
 
+import br.com.uoutec.community.ediacaran.front.security.pub.AuthenticationMethodBuilder;
 import br.com.uoutec.community.ediacaran.front.security.pub.WebSecurityManagerPlugin;
 import br.com.uoutec.community.ediacaran.front.security.tomcat.ContextConfigurerListener;
 import br.com.uoutec.community.ediacaran.security.SecurityRegistryException;
@@ -33,7 +34,9 @@ public class PluginInstaller extends AbstractPlugin{
 				.addRole("user")
 			.addConstraint("/admin/*")
 				.addRole("user")
-			.form("/login", "/login?error=true");
+			.form()
+				.setOption(AuthenticationMethodBuilder.LOGIN_PAGE, "/login")
+				.setOption(AuthenticationMethodBuilder.ERROR_PAGE, "/login?error=true");
 		
 	}
 	

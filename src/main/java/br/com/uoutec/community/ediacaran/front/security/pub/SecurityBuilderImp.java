@@ -1,23 +1,18 @@
 package br.com.uoutec.community.ediacaran.front.security.pub;
 
-import br.com.uoutec.community.ediacaran.security.AuthorizationManager;
 import br.com.uoutec.community.ediacaran.security.SecurityConstraint;
 
 public class SecurityBuilderImp 
 	implements SecurityBuilder{
 
-	private AuthorizationManager authorizationManager;
-	
 	private SecurityConfig securityConfig;
 	
 	public SecurityBuilderImp(SecurityBuilderImp builder) {
 		this.securityConfig = builder.securityConfig;
-		this.authorizationManager = builder.authorizationManager;
 	}
 	
-	public SecurityBuilderImp(SecurityConfig value, AuthorizationManager authorizationManager) {
+	public SecurityBuilderImp(SecurityConfig value) {
 		this.securityConfig = value;
-		this.authorizationManager = authorizationManager;
 	}
 	
 	protected SecurityConfig getSecurityConfig() {
@@ -27,7 +22,7 @@ public class SecurityBuilderImp
 	public SecurityConstraintBuilder addConstraint(String value) {
 		SecurityConstraint sc = new SecurityConstraint(value);
 		securityConfig.getConstraints().add(sc);
-		return new SecurityConstraintBuilderImp(sc, authorizationManager, this);
+		return new SecurityConstraintBuilderImp(sc, this);
 	}
 	
 	public SecurityBuilder setRealmName(String value) {
@@ -36,26 +31,25 @@ public class SecurityBuilderImp
 	}
 	
 	public void basic() {
-		securityConfig.setMethod(BASIC);
+		authenticationMethod(BASIC);
 	}
 	
 	public void digest() {
-		securityConfig.setMethod(DIGEST);
+		authenticationMethod(DIGEST);
 	}
 	
 	public void cert() {
-		securityConfig.setMethod(CERT);
+		authenticationMethod(CERT);
+	}
+
+	public AuthenticationMethodBuilder form() {
+		authenticationMethod(FORM);
+		return new AuthenticationMethodBuilderImp(securityConfig);
 	}
 	
-	public void form(String loginPage) {
-		securityConfig.setMethod(FORM);
-		securityConfig.setLoginPage(loginPage);
-	}
-	
-	public void form(String loginPage, String errorPage) {
-		securityConfig.setMethod(FORM);
-		securityConfig.setLoginPage(loginPage);
-		securityConfig.setErrorPage(errorPage);
+	public AuthenticationMethodBuilder authenticationMethod(String value) {
+		securityConfig.setMethod(value);
+		return new AuthenticationMethodBuilderImp(securityConfig);
 	}
 	
 }
