@@ -1,19 +1,18 @@
 package br.com.uoutec.community.ediacaran.front.security.pub;
 
-import java.security.Principal;
-
 import javax.inject.Singleton;
 import javax.servlet.ServletRequestEvent;
 import javax.servlet.http.HttpServletRequest;
 
 import br.com.uoutec.ediacaran.core.EdiacaranEventListener;
 import br.com.uoutec.ediacaran.core.EdiacaranEventObject;
+import br.com.uoutec.ediacaran.core.plugins.PublicBean;
 import br.com.uoutec.ediacaran.web.ContextInitializer;
 
 @Singleton
-public class PrincipalRequestListener implements EdiacaranEventListener{
+public class PrincipalRequestListener implements EdiacaranEventListener, PublicBean{
 
-	ThreadLocal<Principal> threadPrincipal;
+	ThreadLocal<HttpServletRequest> threadPrincipal;
 	
 	public PrincipalRequestListener() {
 		this.threadPrincipal = new ThreadLocal<>();
@@ -35,8 +34,7 @@ public class PrincipalRequestListener implements EdiacaranEventListener{
 	}
 
 	private void requestInitialized(ServletRequestEvent arg0) {
-		Principal userPrincipal = ((HttpServletRequest)arg0.getServletRequest()).getUserPrincipal();
-		threadPrincipal.set(userPrincipal);
+		threadPrincipal.set((HttpServletRequest)arg0.getServletRequest());
 	}
 
 	private void requestDestroyed(ServletRequestEvent arg0) {
