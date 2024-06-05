@@ -4,18 +4,20 @@ import javax.inject.Singleton;
 import javax.servlet.ServletRequestEvent;
 import javax.servlet.http.HttpServletRequest;
 
+import br.com.uoutec.community.ediacaran.security.AuthenticatedSubject;
+import br.com.uoutec.community.ediacaran.security.Principal;
+import br.com.uoutec.community.ediacaran.security.Subject;
 import br.com.uoutec.ediacaran.core.EdiacaranEventListener;
 import br.com.uoutec.ediacaran.core.EdiacaranEventObject;
-import br.com.uoutec.ediacaran.core.plugins.PublicBean;
 import br.com.uoutec.ediacaran.web.ContextInitializer;
 
 @Singleton
-public class PrincipalRequestListener implements EdiacaranEventListener, PublicBean{
+public class SubjectRequestListener implements EdiacaranEventListener {
 
-	ThreadLocal<HttpServletRequest> threadPrincipal;
+	private final ThreadLocal<Subject> threadSubject;
 	
-	public PrincipalRequestListener() {
-		this.threadPrincipal = new ThreadLocal<>();
+	public SubjectRequestListener() {
+		this.threadSubject = new ThreadLocal<>();
 	}
 	
 	@Override
@@ -33,12 +35,25 @@ public class PrincipalRequestListener implements EdiacaranEventListener, PublicB
 		}
 	}
 
+	public Subject getSubject() {
+		return threadSubject.get();
+	}
+	
 	private void requestInitialized(ServletRequestEvent arg0) {
-		threadPrincipal.set((HttpServletRequest)arg0.getServletRequest());
+		threadSubject.set(new AuthenticatedSubject() {
+			
+			private static final long serialVersionUID = 1L;
+
+			public Principal getPrincipal() {
+				HttpServletRequest httpRequest = (HttpServletRequest)arg0.getServletRequest();
+				return (Principal) httpRequest.getUserPrincipal();
+			}
+			
+		});
 	}
 
 	private void requestDestroyed(ServletRequestEvent arg0) {
-		threadPrincipal.remove();
+		threadSubject.remove();
 	}
 	
 }
