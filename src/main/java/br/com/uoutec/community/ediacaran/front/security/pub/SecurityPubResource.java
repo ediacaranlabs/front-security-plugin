@@ -47,6 +47,8 @@ public class SecurityPubResource {
 			String username,
 			@Basic(bean="password")
 			String password,
+			@Basic(bean="redirectTo")
+			String redirectTo,
 			@Basic(mappingType=MappingTypes.VALUE)
 			HttpServletRequest request,			
 			@Basic(bean=EdiacaranWebInvoker.LOCALE_VAR, scope=ScopeType.REQUEST, mappingType=MappingTypes.VALUE)
@@ -75,7 +77,11 @@ public class SecurityPubResource {
 		}
 		
 
-		return varParser.getValue("${plugins.ediacaran.front.landing_page}");
+		if(redirectTo == null || redirectTo.trim().isEmpty() || !redirectTo.startsWith("/")) {
+			return varParser.getValue("${plugins.ediacaran.front.landing_page}");	
+		}
+		
+		return redirectTo;
 	}
 	
 	@Action("/logout")
@@ -86,7 +92,7 @@ public class SecurityPubResource {
 			request.logout();
 		}
 		finally {
-			WebFlowController.redirectTo(varParser.getValue("${plugins.ediacaran.front.admin_login_page}"));
+			WebFlowController.redirectTo(varParser.getValue("${plugins.ediacaran.front.login_page}"));
 		}
 	}
 	
