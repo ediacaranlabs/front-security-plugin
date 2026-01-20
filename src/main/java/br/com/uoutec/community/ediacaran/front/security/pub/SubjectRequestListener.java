@@ -40,6 +40,11 @@ public class SubjectRequestListener implements EdiacaranEventListener {
 	}
 	
 	private void requestInitialized(ServletRequestEvent arg0) {
+		
+		if(threadSubject.get() != null) {
+			throw new IllegalStateException();
+		}
+		
 		threadSubject.set(new AuthenticatedSubject() {
 			
 			private static final long serialVersionUID = 1L;
