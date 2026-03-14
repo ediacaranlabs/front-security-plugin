@@ -1,6 +1,7 @@
 package br.com.uoutec.community.ediacaran.front.security.pub;
 
 import javax.inject.Singleton;
+import javax.servlet.ServletRequest;
 import javax.servlet.ServletRequestEvent;
 import javax.servlet.http.HttpServletRequest;
 
@@ -14,7 +15,7 @@ import br.com.uoutec.ediacaran.web.ContextInitializer;
 @Singleton
 public class SubjectRequestListener implements EdiacaranEventListener {
 
-	private final ThreadLocal<Subject> threadSubject;
+	private final ThreadLocal<ThreadEntry> threadSubject;
 	
 	public SubjectRequestListener() {
 		this.threadSubject = new ThreadLocal<>();
@@ -36,29 +37,61 @@ public class SubjectRequestListener implements EdiacaranEventListener {
 	}
 
 	public Subject getSubject() {
-		return threadSubject.get();
+		ThreadEntry e = threadSubject.get();
+		return e == null? null : e.subject;
 	}
 	
 	private void requestInitialized(ServletRequestEvent arg0) {
 		
-		if(threadSubject.get() != null) {
-			throw new IllegalStateException();
+		ThreadEntry e = threadSubject.get();
+
+		if(e != null) {
+			/*
+			if(e.owner.equals(arg0.getServletRequest())){
+				throw new IllegalStateException();
+			}*/
+			
+			return;
 		}
 		
-		threadSubject.set(new AuthenticatedSubject() {
-			
-			private static final long serialVersionUID = 1L;
+		e = new ThreadEntry(
+				new AuthenticatedSubject() {
+					
+					private static final long serialVersionUID = 1L;
 
-			public Principal getPrincipal() {
-				HttpServletRequest httpRequest = (HttpServletRequest)arg0.getServletRequest();
-				return (Principal) httpRequest.getUserPrincipal();
-			}
-			
-		});
+					public Principal getPrincipal() {
+						HttpServletRequest httpRequest = (HttpServletRequest)arg0.getServletRequest();
+						return (Principal) httpRequest.getUserPrincipal();
+					}
+					
+				}, 
+				arg0.getServletRequest()
+		);
+		
+		threadSubject.set(e);
 	}
 
 	private void requestDestroyed(ServletRequestEvent arg0) {
-		threadSubject.remove();
+		
+		ThreadEntry e = threadSubject.get();
+		
+		if(e != null && e.owner.equals(arg0.getServletRequest())) {
+			threadSubject.remove();
+		}
+		
+	}
+	
+	private static class ThreadEntry {
+		
+		public Subject subject;
+		
+		public ServletRequest owner;
+
+		public ThreadEntry(Subject subject, ServletRequest owner) {
+			this.subject = subject;
+			this.owner = owner;
+		}
+		
 	}
 	
 }
