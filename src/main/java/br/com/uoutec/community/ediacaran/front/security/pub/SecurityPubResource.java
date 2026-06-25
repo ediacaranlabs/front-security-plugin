@@ -1,6 +1,7 @@
 package br.com.uoutec.community.ediacaran.front.security.pub;
 
 import java.util.Locale;
+import java.util.Set;
 
 import javax.inject.Inject;
 import javax.servlet.ServletException;
@@ -22,8 +23,12 @@ import org.brandao.brutos.annotation.web.ResponseErrors;
 import org.brandao.brutos.annotation.web.WebActionStrategyType;
 import org.brandao.brutos.web.WebFlowController;
 
+import br.com.uoutec.community.ediacaran.security.BasicRoles;
+import br.com.uoutec.community.ediacaran.security.Subject;
+import br.com.uoutec.community.ediacaran.security.SubjectProvider;
 import br.com.uoutec.community.ediacaran.system.i18n.PluginLanguageUtils;
 import br.com.uoutec.ediacaran.core.VarParser;
+import br.com.uoutec.ediacaran.core.plugins.EntityContextPlugin;
 import br.com.uoutec.ediacaran.web.EdiacaranWebInvoker;
 import br.com.uoutec.pub.entity.InvalidRequestException;
 
@@ -78,7 +83,17 @@ public class SecurityPubResource {
 		
 
 		if(redirectTo == null || redirectTo.trim().isEmpty() || !redirectTo.startsWith("/")) {
-			return varParser.getValue("${plugins.ediacaran.front.landing_page}");	
+			SubjectProvider subjectProvider = EntityContextPlugin.getEntity(SubjectProvider.class);
+			Subject subject = subjectProvider.getSubject();
+			Set<String> roles =  subject.getPrincipal().getStringRoles();
+			
+			if(roles.contains(BasicRoles.MANAGER)) {
+				return varParser.getValue("${plugins.ediacaran.front.web_path}${plugins.ediacaran.front.admin_context}");	
+			}
+			else {
+				return varParser.getValue("${plugins.ediacaran.front.web_path}${plugins.ediacaran.front.panel_context}");	
+			}
+			//return varParser.getValue("${plugins.ediacaran.front.landing_page}");	
 		}
 		
 		return redirectTo;
